@@ -28,9 +28,7 @@ const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
 
-  useEffect(() => {
-    console.log("triggered", render);
-  }, [render]);
+  useEffect(() => {}, [render]);
 
   useEffect(() => {
     const existingData = Cookies.get("favorites");
@@ -40,11 +38,9 @@ const Home = () => {
 
   const paginationCount = async (counts) => {
     const totalPages = await Math.ceil(parseInt(counts) / 10);
-    console.log("totalPages", totalPages);
     let pagesArray = [];
     for (let i = 1; i <= totalPages; i++) {
       pagesArray.push(i);
-      console.log(i);
     }
     setPages(pagesArray);
     setRender(!render);
@@ -72,17 +68,12 @@ const Home = () => {
     axios
       .get(`https://swapi.dev/api/people/?page=${currentPage}`)
       .then((res) => {
-        console.log("RESPONSE", res.data);
         setPeople(res.data.results);
         setTotalCount(res.data.count);
         paginationCount(res.data.count);
         setManupulate(!manupulate);
-        // setCircularValue(100);
-        console.log(circularValue);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, [currentPage]);
 
   const addToFavorites = (id) => {

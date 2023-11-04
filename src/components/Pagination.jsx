@@ -11,8 +11,6 @@ const Pagination = ({
   load,
   setLoad,
 }) => {
-  console.log("totalCounts", totalCounts);
-
   return (
     <HStack
       spacing="4"
