@@ -1,15 +1,19 @@
 import React from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Character_Card from "./Character_Card";
+import Character_Details from "./Character_Details";
 import {
   Container,
   Grid,
   CircularProgress,
   CircularProgressLabel,
+  Button,
 } from "@chakra-ui/react";
 import Pagination from "./Pagination";
 import Cookies from "js-cookie";
+import { useDisclosure } from "@chakra-ui/react";
+import Overlay from "./Overlay";
 
 const Home = () => {
   const [people, setPeople] = useState([]);
@@ -20,6 +24,9 @@ const Home = () => {
   const [load, setLoad] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [favorites, setFavorites] = useState([]);
+  const [selectedPerson, setSelectedPerson] = useState();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef();
 
   useEffect(() => {
     console.log("triggered", render);
@@ -108,12 +115,19 @@ const Home = () => {
               gap={6}
             >
               {people?.map((item, i) => (
-                <Character_Card
-                  people={item}
-                  key={i}
-                  addToFavorites={addToFavorites}
-                  favorites={favorites}
-                />
+                <>
+                  <Character_Card
+                    people={item}
+                    key={i}
+                    addToFavorites={addToFavorites}
+                    favorites={favorites}
+                    isOpen={isOpen}
+                    onOpen={onOpen}
+                    onClose={onClose}
+                    btnRef={btnRef}
+                    setSelectedPerson={setSelectedPerson}
+                  />
+                </>
               ))}
             </Grid>
             <Pagination
@@ -129,6 +143,15 @@ const Home = () => {
           </>
         )}
       </Container>
+      <Overlay
+        people={selectedPerson}
+        addToFavorites={addToFavorites}
+        favorites={favorites}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        btnRef={btnRef}
+      />
     </div>
   );
 };
